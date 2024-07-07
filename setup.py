@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name = 'package',
+    name = 'montecarlo',
     version = '0.1.0',
     author = 'Luke Schneider',
     author_email = 'vrd9sd@virginia.edu',
