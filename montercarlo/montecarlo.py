@@ -5,8 +5,7 @@ import pandas as pd
 class Die():
     def __init__(self, faces):
         """ 
-        -1. Throw TypeError if not NumPy array
-        -2. Raise ValueError if array values not distinct
+        -1. Throw TypeError if not NumPy array, raise ValueError if array values not distinct
         -3. Internally initialize weights to 1.0 for each face
         -4. Save faces and weights in private df w/ faces in index
         Args:
