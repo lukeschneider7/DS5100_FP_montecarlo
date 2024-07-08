@@ -62,6 +62,11 @@ class Game():
     def __init(self):
         pass
 
+    def play(sel, times_to_roll):
+        pass
+    
+    def last_play(self, narrow_or_wide):
+        pass
 
 
 class Analyszer():
