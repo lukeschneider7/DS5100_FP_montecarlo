@@ -4,6 +4,9 @@ import random
 
 
 class Die():
+    """Initialize a die with faces given as a numpy array and a weight for each face
+    - Include methods for changing weights, rolling die, and returning die df
+    """
     def __init__(self, faces):
         """ Internally initialize weights to 1 for each face
         - Throw TypeError if not NumPy array, raise ValueError if array values not distinct
@@ -49,24 +52,48 @@ class Die():
             outcomes: (list) Python list of outcomes not internally stored
         """
         self._outcomes = random.choices(self._df.index.tolist(), weights=self._df['values'], k=times)
-        
+        return self._outcomes
+    
     def get_state(self):
         """ Returns a COPY of private die data frame
         """
         df_copy = self._df.copy()
         return df_copy
-        #return self._outcomes
         
 
 class Game():
-    def __init(self):
-        pass
+    def __init(self, similar_die):
+        """ Takes list of alredy instantiated similar die
+        Args:
+            similar_die: (list) instantiated similar die"""
+        self.similiar_die = similar_die
 
-    def play(sel, times_to_roll):
+
+    def play(self, times_to_roll):
+        """ Saves result of play to private df wide format 
+        Args:
+            times_to_roll (int) how many times die should be rolled
+        """
+        self.outcomes = Die.roll_die(times_to_roll) # list of outcomes 
+        self.df_play = pd.DataFrame({'values': self.outcomes}, index= range(len(times_to_roll)), columns = range(len(self.similar_die)))
         pass
     
-    def last_play(self, narrow_or_wide):
-        pass
+
+    def last_play(self, narrow_or_wide='wide'):
+        """ Returns copy of private play() df to user
+        - raise Value Error if user passes invalid argument
+        Args:
+            narrow_or_wide: (str) indicating df to be returned narrow or wide
+        Returns:
+            self._df_play: (dataframe) private df from play() method
+        """
+        if narrow_or_wide.lower() != 'narrow' and narrow_or_wide.lower() != 'wide':
+            raise ValueError("specify 'narrow' or 'wide' df format to be returned")
+        elif narrow_or_wide.lower() == 'narrow':
+            self._df_play_narrow = pd.melt(self.df_play, id_vars=['roll number'], var_name='die number', value_name='face rolled')
+            return self._df_play_narrow
+        else:
+            return self._df_play
 
 
 class Analyszer():
