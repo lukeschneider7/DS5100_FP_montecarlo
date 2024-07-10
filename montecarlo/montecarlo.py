@@ -79,12 +79,12 @@ class Game():
             times_to_roll (int) how many times die should be rolled
         """
         outcomes = list()
+        self.time_to_roll = times_to_roll
         for die in self.similar_dice_list:
             outcomes.append(die.roll_die(times_to_roll)) # list of outcomes 
-        print(outcomes)
-        self.df_play = pd.DataFrame(index=range(1, times_to_roll+1), 
+        self.df_play = pd.DataFrame(index= range(1, times_to_roll+1), 
                                     columns = range(len(self.similar_dice_list)))
-        self.df_play[:] = [[outcomes[i][j] for j in range(len(outcomes[0]))] for i in range(len(outcomes))]
+        self.df_play[:] = [[outcomes[i][j] for i in range(len(outcomes[0]))] for j in range(len(outcomes))]
 
 
     def result(self, narrow_or_wide='wide'):
@@ -93,29 +93,43 @@ class Game():
         Args:
             narrow_or_wide: (str) indicating df to be returned narrow or wide
         Returns:
-            self._df_play: (dataframe) private df from play() method
+            copy_df : (dataframe) copy of private df from play() method
         """
-        copy_df = self.df_play.copy()
+        self.copy_df = self.df_play.copy()
         if narrow_or_wide.lower() != 'narrow' and narrow_or_wide.lower() != 'wide':
             raise ValueError("specify 'narrow' or 'wide' df format to be returned")
         elif narrow_or_wide.lower() == 'narrow':
-            self.df_play_narrow = pd.melt(copy_df, id_vars=['roll number'], var_name='die number', value_name='face rolled')
-            return self.df_play_narrow
+            self.copy_df = pd.melt(self.copy_df.reset_index(), id_vars=['index'], var_name='variable', value_name='value')
+            self.copy_df.rename(columns={'index': 'roll',
+                                         'variable': 'die',
+                                         'value': 'face' }, inplace=True)
+            return self.copy_df
         else:
-            return copy_df
+            return self.copy_df
 
 
-class Analyszer():
-    def __init(self, game_object):
-        #if type(game_object) != type()
-        # raise ValueError("game_object arg given not a game object")
-        #else:
-            #self.game_object = game_object
-        pass
+class Analyzer():
+    def __init__(self, game_object):
+        self.game_object = game_object
+
     def jackpot(self):
-        pass
+        jackpots = 0
+        self.game_object.result(narrow_or_wide='narrow')
+
+        for i in range(len(self.game_object.similar_dice_list)):
+            faces_each_die = self.game_object.copy_df.loc[self.game_object.copy_df['die'] == i, ['face']]
+            if len(faces_each_die['face'].unique()) == 1:
+                jackpots += 1
+        return jackpots 
+        
+
     def face_counts(self):
-        pass
+        face_count = pd.DataFrame(0, index=range(1, self.game_object.time_to_roll + 1),
+                                   columns=range(1, len(self.game_object.faces) + 1))
+        
+        for i in range(1, len(self.game_object.times_to_roll+1)):
+            print(i)
+
     def combo_count(self):
         pass
     def permutation_count(self):
@@ -123,17 +137,19 @@ class Analyszer():
 
   
 
-    faces = np.array([[1, 2, 3],[4, 5, 6]])
-    die0 = Die(faces)
-    die1 = Die(faces)
-    die2 = Die(faces)
-    die1.change_weight(2, 10)
-    die2.change_weight(3, 20)
-    dice_list = [die0, die1, die2]
-
-    game1 = Game(dice_list)
-    game1.play(times_to_roll=3)
-    print(game1.result(narrow_or_wide='wide'))
+faces = np.array([[1, 2, 3],[4, 5, 6]])
+die0 = Die(faces)
+die1 = Die(faces)
+die2 = Die(faces)
+die1.change_weight(1, 100)
+die2.change_weight(6, 100)
+die0.change_weight(3, 100)
+dice_list = [die0, die1, die2]
+game1 = Game(dice_list)
+game1.play(times_to_roll=3)
+print(game1.result(narrow_or_wide='narrow'))
     
-    #analyze1 = Analyszer(game1)
+analyze1 = Analyzer(game1)
+print(analyze1.jackpot())
+print(analyze1.face_counts())
     

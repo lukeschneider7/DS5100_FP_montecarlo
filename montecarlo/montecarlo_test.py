@@ -9,7 +9,6 @@ class DieTestCase(unittest.TestCase):
     def test_init_(self):
         weights = np.ones(die0.faces.size)
         faces = die0.faces.flatten()
-        print(die0.faces)
         actual = die0.df
         expected = pd.DataFrame({'values': weights},
                                   index=faces)
@@ -44,17 +43,28 @@ class GameTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_play(self):
-        pass
+        times_to_roll=3
+        game1.play(times_to_roll)
+        actual = game1.df_play.shape # Tuple of (nrows, ncolumns)
+        expected = (times_to_roll, len(game1.similar_dice_list)) # Tuple of (times to roll, len(die_list))
+        self.assertEqual(actual, expected)
 
 
     def test_result(self):
-        pass
-        
+        times_to_roll=3
+        game1.play(times_to_roll)
+        actual = game1.result("narrow").shape # Tuple of narrow df
+        expected = ((times_to_roll*len(dice_list1)), 3) # Tuple of nrows vs ncol df
+        self.assertEqual(actual, expected)
+
+
 
 class AnalyzerTestCase(unittest.TestCase):
     def test__init__ (self):
         pass
     def test_jackpot(self):
+        pass
+    def test_face_counts(self):
         pass
     def test_combo_count(self):
         pass
@@ -70,5 +80,4 @@ if __name__ == '__main__':
     die2.change_weight(3, 20)
     dice_list1 = [die0, die1, die2]
     game1 = Game(dice_list1)
-    print(game1.similar_dice_list)
     unittest.main()
