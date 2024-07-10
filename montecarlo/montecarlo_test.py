@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from montecarlo import Die, Game, Analyszer
+from montecarlo import Die, Game, Analyzer
 import unittest
 from pandas.testing import assert_frame_equal
 
@@ -60,10 +60,20 @@ class GameTestCase(unittest.TestCase):
 
 
 class AnalyzerTestCase(unittest.TestCase):
-    def test__init__ (self):
-        pass
+    def test__init__(self):
+        analyze1 = Analyzer(game1)
+        actual = analyze1.game_object 
+        expected = game1
+        self.assertEqual(actual, game1)
+
     def test_jackpot(self):
-        pass
+        game1.play(times_to_roll=3)
+        print(game1.result(narrow_or_wide='narrow'))    
+        analyze1 = Analyzer(game1)
+        actual = analyze1.jackpot()
+        expected = 3
+        self.assertEqual(actual, expected)
+
     def test_face_counts(self):
         pass
     def test_combo_count(self):
@@ -76,8 +86,9 @@ if __name__ == '__main__':
     die0 = Die(faces)
     die1 = Die(faces)
     die2 = Die(faces)
-    die1.change_weight(2, 10)
-    die2.change_weight(3, 20)
+    die0.change_weight(1, 1000)
+    die1.change_weight(2, 1000)
+    die2.change_weight(3, 1000)
     dice_list1 = [die0, die1, die2]
     game1 = Game(dice_list1)
     unittest.main()

@@ -74,7 +74,7 @@ class Game():
 
 
     def play(self, times_to_roll):
-        """ Saves result of play to private df wide format 
+        """Saves result of play to private df wide format 
         Args:
             times_to_roll (int) how many times die should be rolled
         """
@@ -88,8 +88,7 @@ class Game():
 
 
     def result(self, narrow_or_wide='wide'):
-        """ Returns copy of private play() df to user
-        - raise Value Error if user passes invalid argument
+        """Returns copy of private play() df to user, raise ValueError if invalid arg
         Args:
             narrow_or_wide: (str) indicating df to be returned narrow or wide
         Returns:
@@ -109,10 +108,20 @@ class Game():
 
 
 class Analyzer():
+    """Takes results of a single game and computes descriptive stats about it
+    """
     def __init__(self, game_object):
+        """Instantiates a Game object, throws value error if not passed game object
+        Args:
+            game_object: a game object 
+        """
         self.game_object = game_object
 
     def jackpot(self):
+        """Computes how many times a game results in jackpot(all faces same)
+        Returns:
+            jackpots: (int) integer for number of jackpots
+        """
         jackpots = 0
         self.game_object.result(narrow_or_wide='narrow')
 
@@ -122,8 +131,11 @@ class Analyzer():
                 jackpots += 1
         return jackpots 
         
-
     def face_counts(self):
+        """Computes how many times a given face is rolled in each event
+        Returns:
+            face_count: (DataFrame) index roll number, faces for columns, counts as values in cells
+        """
         face_count = pd.DataFrame(0, index=range(1, self.game_object.time_to_roll + 1),
                                    columns=range(1, len(self.game_object.faces) + 1))
         
@@ -131,19 +143,26 @@ class Analyzer():
             print(i)
 
     def combo_count(self):
-        pass
-    def permutation_count(self):
+        """Computes distinct combinations of faces rolled along with counts
+        Returns:
+            combo_counts: (DataFrame) multiindex of distinct combos and column for associated counts
+        """
         pass
 
-  
+    def permutation_count(self):
+        """Computes distinct permutations of faces rolled, along with counts
+        Returns:
+            permu_count: (DataFrame) mutltiindex of distinct permutations and column for associated counts
+        """
+        pass
 
 faces = np.array([[1, 2, 3],[4, 5, 6]])
 die0 = Die(faces)
 die1 = Die(faces)
 die2 = Die(faces)
+die0.change_weight(3, 100)
 die1.change_weight(1, 100)
 die2.change_weight(6, 100)
-die0.change_weight(3, 100)
 dice_list = [die0, die1, die2]
 game1 = Game(dice_list)
 game1.play(times_to_roll=3)
@@ -151,5 +170,4 @@ print(game1.result(narrow_or_wide='narrow'))
     
 analyze1 = Analyzer(game1)
 print(analyze1.jackpot())
-print(analyze1.face_counts())
     
