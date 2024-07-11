@@ -79,7 +79,7 @@ class Game():
             times_to_roll (int) how many times die should be rolled
         """
         outcomes = list()
-        self.time_to_roll = times_to_roll
+        self.times_to_roll = times_to_roll
         for die in self.similar_dice_list:
             outcomes.append(die.roll_die(times_to_roll)) # list of outcomes 
         self.df_play = pd.DataFrame(index= range(1, times_to_roll+1), 
@@ -130,17 +130,23 @@ class Analyzer():
             if len(faces_each_die['face'].unique()) == 1:
                 jackpots += 1
         return jackpots 
-        
+
+
     def face_counts(self):
         """Computes how many times a given face is rolled in each event
         Returns:
             face_count: (DataFrame) index roll number, faces for columns, counts as values in cells
         """
-        face_count = pd.DataFrame(0, index=range(1, self.game_object.time_to_roll + 1),
-                                   columns=range(1, len(self.game_object.faces) + 1))
+        result = self.game_object.result(narrow_or_wide='wide')
+
+        face_count = pd.DataFrame(0, index=range(1, self.game_object.times_to_roll+1) ,
+                                   columns=self.game_object.similar_dice_list[0].faces)
         
-        for i in range(1, len(self.game_object.times_to_roll+1)):
-            print(i)
+        for i in result.index: # Use roll i(1,2,3)
+            counts = result.loc[i].value_counts() # Count num of each face in i row
+            face_count.loc[i, counts.index] = counts # Fill in i row, and counts.index(a face) column with counts data
+        return face_count
+
 
     def combo_count(self):
         """Computes distinct combinations of faces rolled along with counts
@@ -156,7 +162,7 @@ class Analyzer():
         """
         pass
 
-faces = np.array([[1, 2, 3],[4, 5, 6]])
+faces = np.array([1, 2, 3, 4, 5, 6])
 die0 = Die(faces)
 die1 = Die(faces)
 die2 = Die(faces)
@@ -166,8 +172,8 @@ die2.change_weight(6, 100)
 dice_list = [die0, die1, die2]
 game1 = Game(dice_list)
 game1.play(times_to_roll=3)
-print(game1.result(narrow_or_wide='narrow'))
+print(game1.result(narrow_or_wide='wide'))
     
 analyze1 = Analyzer(game1)
 print(analyze1.jackpot())
-    
+print(analyze1.face_counts())
