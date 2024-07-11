@@ -84,8 +84,9 @@ class Game():
             outcomes.append(die.roll_die(times_to_roll)) # list of outcomes 
         self.df_play = pd.DataFrame(index= range(1, times_to_roll+1), 
                                     columns = range(len(self.similar_dice_list)))
-        self.df_play[:] = [[outcomes[i][j] for i in range(len(outcomes[0]))] for j in range(len(outcomes))]
-
+        self.df_play[:] = [[outcomes[i][j] for i in range(len(outcomes))] for j in range(len(outcomes[0]))]
+        print(self.df_play)
+    
 
     def result(self, narrow_or_wide='wide'):
         """Returns copy of private play() df to user, raise ValueError if invalid arg
@@ -168,19 +169,27 @@ class Analyzer():
         """
         pass
 
+
 faces = np.array([1, 2, 3, 4, 5, 6])
 die0 = Die(faces)
 die1 = Die(faces)
 die2 = Die(faces)
-die0.change_weight(3, 10)
-die1.change_weight(1, 10)
-die2.change_weight(6, 100)
-dice_list = [die0, die1, die2]
+die0.change_weight(1, 100)
+die1.change_weight(2, 100)
+die2.change_weight(3, 100)
+#Make Die list and game object, call game methods
+dice_list1 = [die0, die1, die2]
+game1 = Game(dice_list1)
+times_to_roll=3
+game1.play(times_to_roll)
+
+
+
+faces =  np.array(['H', 'T'])
+fair_coin0 = Die(faces)
+unfair_coin = Die(faces)
+unfair_coin.change_weight('H', 5)
+fair_coin1= Die(faces)
+dice_list = [fair_coin0, fair_coin1]
 game1 = Game(dice_list)
-game1.play(times_to_roll=3)
-print(game1.result(narrow_or_wide='wide'))
-    
-analyze1 = Analyzer(game1)
-print(analyze1.jackpot())
-print(analyze1.face_counts())
-print(analyze1.combo_count())
+game1.play(times_to_roll=80)

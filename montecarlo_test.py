@@ -96,5 +96,5 @@ if __name__ == '__main__':
     game1.play(times_to_roll)
     game1.result(narrow_or_wide='wide')  
     #Make analyzer object and call methods
-    analyze1 = Analyzer(game1)
+    analyze1 = Analyzer(game1)g
     unittest.main()
