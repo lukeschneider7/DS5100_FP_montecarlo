@@ -72,7 +72,11 @@ class AnalyzerTestCase(unittest.TestCase):
         self.assertEqual(actual_df.shape, expected)
 
     def test_combo_count(self):
-        pass
+        actual_df = analyze1.combo_count()
+        expected = len(dice_list1)
+        self.assertIsInstance(actual_df, pd.DataFrame)
+        self.assertEqual(len(actual_df.index[0]), expected)
+
     def test_permutation_count(self):
         pass
 

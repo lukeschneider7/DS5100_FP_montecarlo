@@ -161,7 +161,6 @@ class Analyzer():
         combo_counts
         return (combo_counts)
         
-
     def permutation_count(self):
         """Computes distinct permutations of faces rolled, along with counts
         Returns:
@@ -173,8 +172,8 @@ faces = np.array([1, 2, 3, 4, 5, 6])
 die0 = Die(faces)
 die1 = Die(faces)
 die2 = Die(faces)
-die0.change_weight(3, 100)
-die1.change_weight(1, 100)
+die0.change_weight(3, 10)
+die1.change_weight(1, 10)
 die2.change_weight(6, 100)
 dice_list = [die0, die1, die2]
 game1 = Game(dice_list)
