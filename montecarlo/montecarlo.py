@@ -85,7 +85,6 @@ class Game():
         self.df_play = pd.DataFrame(index= range(1, times_to_roll+1), 
                                     columns = range(len(self.similar_dice_list)))
         self.df_play[:] = [[outcomes[i][j] for i in range(len(outcomes))] for j in range(len(outcomes[0]))]
-        print(self.df_play)
     
 
     def result(self, narrow_or_wide='wide'):
@@ -118,19 +117,20 @@ class Analyzer():
         """
         self.game_object = game_object
 
+
     def jackpot(self):
         """Computes how many times a game results in jackpot(all faces same)
         Returns:
             jackpots: (int) integer for number of jackpots
         """
         jackpots = 0
-        self.game_object.result(narrow_or_wide='narrow')
+        df_narrow = self.game_object.result(narrow_or_wide='narrow')
 
-        for i in range(len(self.game_object.similar_dice_list)):
-            faces_each_die = self.game_object.copy_df.loc[self.game_object.copy_df['die'] == i, ['face']]
+        for i in range(1, self.game_object.times_to_roll+1):
+            faces_each_die = df_narrow.loc[df_narrow['roll'] == i, ['face']]
             if len(faces_each_die['face'].unique()) == 1:
                 jackpots += 1
-        return jackpots 
+        return jackpots
 
 
     def face_counts(self):
@@ -170,18 +170,7 @@ class Analyzer():
         pass
 
 
-faces = np.array([1, 2, 3, 4, 5, 6])
-die0 = Die(faces)
-die1 = Die(faces)
-die2 = Die(faces)
-die0.change_weight(1, 100)
-die1.change_weight(2, 100)
-die2.change_weight(3, 100)
-#Make Die list and game object, call game methods
-dice_list1 = [die0, die1, die2]
-game1 = Game(dice_list1)
-times_to_roll=3
-game1.play(times_to_roll)
+
 
 
 
@@ -190,6 +179,12 @@ fair_coin0 = Die(faces)
 unfair_coin = Die(faces)
 unfair_coin.change_weight('H', 5)
 fair_coin1= Die(faces)
+
 dice_list = [fair_coin0, fair_coin1]
 game1 = Game(dice_list)
 game1.play(times_to_roll=80)
+print(game1.result())
+print(game1.result('narrow'))
+
+analyze1 = Analyzer(game1)
+print(analyze1.jackpot())
