@@ -43,16 +43,11 @@ class GameTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_play(self):
-        times_to_roll=3
-        game1.play(times_to_roll)
         actual = game1.df_play.shape # Tuple of (nrows, ncolumns)
         expected = (times_to_roll, len(game1.similar_dice_list)) # Tuple of (times to roll, len(die_list))
         self.assertEqual(actual, expected)
 
-
     def test_result(self):
-        times_to_roll=3
-        game1.play(times_to_roll)
         actual = game1.result("narrow").shape # Tuple of narrow df
         expected = ((times_to_roll*len(dice_list1)), 3) # Tuple of nrows vs ncol df
         self.assertEqual(actual, expected)
@@ -61,34 +56,42 @@ class GameTestCase(unittest.TestCase):
 
 class AnalyzerTestCase(unittest.TestCase):
     def test__init__(self):
-        analyze1 = Analyzer(game1)
         actual = analyze1.game_object 
         expected = game1
         self.assertEqual(actual, game1)
 
     def test_jackpot(self):
-        game1.play(times_to_roll=3)
-        print(game1.result(narrow_or_wide='narrow'))    
-        analyze1 = Analyzer(game1)
         actual = analyze1.jackpot()
         expected = 3
         self.assertEqual(actual, expected)
 
     def test_face_counts(self):
-        pass
+        actual_df = analyze1.face_counts()
+        expected = (times_to_roll, len(die0.faces))
+        self.assertIsInstance(actual_df, pd.DataFrame)
+        self.assertEqual(actual_df.shape, expected)
+
     def test_combo_count(self):
         pass
     def test_permutation_count(self):
         pass
 
 if __name__ == '__main__':
-    faces = np.array([[1, 2, 3],[4, 5, 6]])
+    #Instantiate Die objects and change weights
+    faces = np.array([1, 2, 3, 4, 5, 6])
     die0 = Die(faces)
     die1 = Die(faces)
     die2 = Die(faces)
-    die0.change_weight(1, 1000)
-    die1.change_weight(2, 1000)
-    die2.change_weight(3, 1000)
+    die0.change_weight(1, 100)
+    die1.change_weight(2, 100)
+    die2.change_weight(3, 100)
+    #Make Die list and game object, call game methods
     dice_list1 = [die0, die1, die2]
     game1 = Game(dice_list1)
+    times_to_roll=3
+    game1.play(times_to_roll)
+    game1.result(narrow_or_wide='wide')  
+    #Make analyzer object and call methods
+    analyze1 = Analyzer(game1)
+
     unittest.main()
