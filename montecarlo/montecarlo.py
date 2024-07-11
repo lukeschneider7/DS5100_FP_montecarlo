@@ -153,7 +153,14 @@ class Analyzer():
         Returns:
             combo_counts: (DataFrame) multiindex of distinct combos and column for associated counts
         """
-        pass
+        result = self.game_object.result(narrow_or_wide='wide')
+        face_combos = result.apply(tuple, axis=1)
+        face_counts = face_combos.value_counts()
+        combo_counts = face_counts.rename_axis('Distinct Face Combos').reset_index(name='Count')
+        combo_counts.set_index('Distinct Face Combos', inplace=True)
+        combo_counts
+        return (combo_counts)
+        
 
     def permutation_count(self):
         """Computes distinct permutations of faces rolled, along with counts
@@ -177,3 +184,4 @@ print(game1.result(narrow_or_wide='wide'))
 analyze1 = Analyzer(game1)
 print(analyze1.jackpot())
 print(analyze1.face_counts())
+print(analyze1.combo_count())
