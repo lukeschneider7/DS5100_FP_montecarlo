@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from montecarlo import Die, Game, Analyzer
+from montecarlo.montecarlo import Die, Game, Analyzer
 import unittest
 from pandas.testing import assert_frame_equal
 
@@ -62,7 +62,7 @@ class AnalyzerTestCase(unittest.TestCase):
 
     def test_jackpot(self):
         actual = analyze1.jackpot()
-        expected = 3
+        expected = times_to_roll
         self.assertEqual(actual, expected)
 
     def test_face_counts(self):
@@ -97,5 +97,4 @@ if __name__ == '__main__':
     game1.result(narrow_or_wide='wide')  
     #Make analyzer object and call methods
     analyze1 = Analyzer(game1)
-
     unittest.main()
