@@ -22,7 +22,7 @@ class Die():
         else: 
             weights = np.ones(faces.size)
             faces = faces.flatten()
-            self.df = pd.DataFrame({'values': weights}, index=faces)    
+            self._df = pd.DataFrame({'values': weights}, index=faces)    
 
 
     def change_weight(self, face_to_change, weight_new ):
@@ -38,7 +38,7 @@ class Die():
         elif type(float(weight_new))!= float:
             raise TypeError("Weight_new arg must be int/float or castable as num")
         else:
-            self.df.loc[face_to_change] = weight_new
+            self._df.loc[face_to_change] = weight_new
 
 
     def roll_die(self, times=1):
@@ -48,14 +48,14 @@ class Die():
         Returns:
             outcomes: (list) Python list of outcomes not internally stored
         """
-        outcomes = random.choices(self.df.index.tolist(), weights=self.df['values'], k=times)
+        outcomes = random.choices(self._df.index.tolist(), weights=self._df['values'], k=times)
         return outcomes
     
 
     def get_state(self):
         """ Returns a COPY of private die data frame
         """
-        df_copy = self.df.copy()
+        df_copy = self._df.copy()
         return df_copy
         
 
@@ -82,9 +82,9 @@ class Game():
         self.times_to_roll = times_to_roll
         for die in self.similar_dice_list:
             outcomes.append(die.roll_die(times_to_roll)) # list of outcomes 
-        self.df_play = pd.DataFrame(index= range(1, times_to_roll+1), 
+        self._df_play = pd.DataFrame(index= range(1, times_to_roll+1), 
                                     columns = range(len(self.similar_dice_list)))
-        self.df_play[:] = [[outcomes[i][j] for i in range(len(outcomes))] for j in range(len(outcomes[0]))]
+        self._df_play[:] = [[outcomes[i][j] for i in range(len(outcomes))] for j in range(len(outcomes[0]))]
     
 
     def result(self, narrow_or_wide='wide'):
@@ -94,7 +94,7 @@ class Game():
         Returns:
             copy_df : (dataframe) copy of private df from play() method
         """
-        self.copy_df = self.df_play.copy()
+        self.copy_df = self._df_play.copy()
         if narrow_or_wide.lower() != 'narrow' and narrow_or_wide.lower() != 'wide':
             raise ValueError("specify 'narrow' or 'wide' df format to be returned")
         elif narrow_or_wide.lower() == 'narrow':

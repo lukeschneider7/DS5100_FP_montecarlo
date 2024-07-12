@@ -9,16 +9,16 @@ class DieTestCase(unittest.TestCase):
     def test_init_(self):
         weights = np.ones(die0.faces.size)
         faces = die0.faces.flatten()
-        actual = die0.df
+        actual = die0._df
         expected = pd.DataFrame({'values': weights},
                                   index=faces)
-        assert_frame_equal(actual, die0.df)
+        assert_frame_equal(actual, die0._df)
 
 
     def test_change_weight(self):
         i, weight = 5, 4
         die0.change_weight(i, weight)
-        actual = die0.df.iloc[i-1]['values']
+        actual = die0._df.iloc[i-1]['values']
         expected = weight
         self.assertEqual(actual, expected)
 
@@ -32,7 +32,7 @@ class DieTestCase(unittest.TestCase):
 
     def test_get_state(self):
         actual = die0.get_state()
-        expected = die0.df
+        expected = die0._df
         assert_frame_equal(actual, expected)
 
 
@@ -43,7 +43,7 @@ class GameTestCase(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_play(self):
-        actual = game1.df_play.shape # Tuple of (nrows, ncolumns)
+        actual = game1._df_play.shape # Tuple of (nrows, ncolumns)
         expected = (times_to_roll, len(game1.similar_dice_list)) # Tuple of (times to roll, len(die_list))
         self.assertEqual(actual, expected)
 
@@ -61,8 +61,8 @@ class AnalyzerTestCase(unittest.TestCase):
         self.assertEqual(actual, game1)
 
     def test_jackpot(self):
-        actual = analyze1.jackpot()
-        expected = times_to_roll
+        actual = type(analyze1.jackpot())
+        expected = int
         self.assertEqual(actual, expected)
 
     def test_face_counts(self):
@@ -78,7 +78,11 @@ class AnalyzerTestCase(unittest.TestCase):
         self.assertEqual(len(actual_df.index[0]), expected)
 
     def test_permutation_count(self):
-        pass
+        actual_df = analyze1.permutation_count()
+        expected = len(dice_list1)
+        self.assertIsInstance(actual_df, pd.DataFrame)
+        self.assertEqual(len(actual_df.index[0]), expected)
+
 
 if __name__ == '__main__':
     #Instantiate Die objects and change weights

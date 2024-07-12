@@ -8,7 +8,7 @@ setup(
     packages = find_packages(),
     url = 'https://github.com/lukeschneider7/DS5100-FP1/tree/main/montercarlo',
     license = 'LICENSE.txt',
-    description = 'An awesome package that does something',
-    long_description = open('README.txt').read(),
+    description = 'Monte Carlo Simulator',
+    long_description = open('README.md').read(),
     install_requires = ['numpy >= 1.11.1', 'matplotlib >= 1.5.1'],
 )
