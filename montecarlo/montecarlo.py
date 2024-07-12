@@ -107,6 +107,7 @@ class Game():
             return self.copy_df
 
 
+
 class Analyzer():
     """Takes results of a single game and computes descriptive stats about it
     """
@@ -155,13 +156,13 @@ class Analyzer():
             combo_counts: (DataFrame) multiindex of distinct combos and column for associated counts
         """
         result = self.game_object.result(narrow_or_wide='wide')
-        face_combos = result.apply(tuple, axis=1)
-        face_counts = face_combos.value_counts()
-        combo_counts = face_counts.rename_axis('Distinct Face Combos').reset_index(name='Count')
+        sorted_combos = result.apply(lambda x: tuple(sorted(x)), axis=1)
+        combo_counts = sorted_combos.value_counts().rename_axis('Distinct Face Combos').reset_index(name='Count')
         combo_counts.set_index('Distinct Face Combos', inplace=True)
         combo_counts
         return combo_counts
-        
+
+
     def permutation_count(self):
         """Computes distinct permutations of faces rolled, along with counts
         Returns:
@@ -174,23 +175,3 @@ class Analyzer():
         permu_counts.set_index('Distinct Face Permutations', inplace=True)
         permu_counts
         return permu_counts
-
-
-
-
-
-
-faces =  np.array(['H', 'T'])
-fair_coin0 = Die(faces)
-unfair_coin = Die(faces)
-unfair_coin.change_weight('H', 5)
-fair_coin1= Die(faces)
-
-dice_list = [fair_coin0, fair_coin1]
-game1 = Game(dice_list)
-game1.play(times_to_roll=80)
-print(game1.result())
-print(game1.result('narrow'))
-
-analyze1 = Analyzer(game1)
-print(analyze1.jackpot())
