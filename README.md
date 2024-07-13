@@ -4,20 +4,12 @@
 
 This project is a montecarlo Die game Simulator
 
--   **Metadata**: 
-Name: Luke Schneider
-Project Name: Montecarlo Simulator
+# MetaData
+    Name: Luke Schneider
+    Project Name: Montecarlo Simulator
 
 
-
--   **Synopsis:** Show brief demo code of how the classes are used, i.e.
-    code snippets showing how to install, import, and use the code
-    to (1) create dice, (2) play a game, and (3) analyze a game. You can
-    use preformatted blocks for the code.
-
--   Intstall: 
-    To install the package, navigate to the directory containing `setup.py` and run the following in the terminal:
-
+# Synopsis 
 ```bash
 pip install .
 ```
@@ -64,17 +56,15 @@ analyze1.permutation_count()
 
 
 
--   **API description**: A list of all classes with their public methods
-    and attributes. Each item should show their docstrings. All
-    parameters (with data types and defaults) should be described. All
-    return values should be described. Do not describe private methods
-    and attributes.
+# API description
+
+```python
 
     class Die():
     """Initialize a die with faces given as a numpy array and a weight for each face
     - Include methods for changing weights, rolling die, and returning die df
     """
-    def \__init\__(self, faces):
+    def _init__(self, faces):
         """ Internally initialize weights to 1 for each face
         - Throw TypeError if not NumPy array, raise ValueError if array values not distinct
         - Save faces and weights in private df w/ faces in index
@@ -110,7 +100,7 @@ class Game():
     - Initialize w/ list that has one or more dice
     - Only keep results of most recent play
     """
-    def \__init\__(self, dice_list):
+    def __init__(self, dice_list):
         """ Takes list of alredy instantiated similar die
         Args:
             similar_die: (list) instantiated similar die"""
@@ -134,13 +124,12 @@ class Game():
 class Analyzer():
     """Takes results of a single game and computes descriptive stats about it
     """
-    def \__init\__(self, game_object):
+    def __init__(self, game_object):
         """Instantiates a Game object, throws value error if not passed game object
         Args:
             game_object: a game object 
         """
   
-
 
     def jackpot(self):
         """Computes how many times a game results in jackpot(all faces same)
@@ -166,3 +155,4 @@ class Analyzer():
             permu_count: (DataFrame) mutltiindex of distinct permutations and column for associated counts
         """
     
+```
