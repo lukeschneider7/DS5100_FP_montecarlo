@@ -116,6 +116,8 @@ class Analyzer():
         Args:
             game_object: a game object 
         """
+        if isinstance(game_object, Game) == False:
+            raise ValueError('Analzyer object not instantiated with a game object')
         self.game_object = game_object
 
 
