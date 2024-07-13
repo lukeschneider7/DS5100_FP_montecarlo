@@ -10,6 +10,8 @@ This project is a montecarlo Die game Simulator
 
 
 # Synopsis 
+- Install
+   To Install the montecarlo from a terminal, navigate to the package root directory and type:
 ```bash
 pip install .
 ```
