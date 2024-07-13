@@ -11,12 +11,12 @@ This project is a montecarlo Die game Simulator
 
 # Synopsis 
 - Install
-   To Install the montecarlo from a terminal, navigate to the package root directory and type:
+   - To Install the montecarlo from a terminal, navigate to the package root directory and type:
 ```bash
 pip install .
 ```
 -   Import: 
-    To Import the montecarlo file from the montecarlo package run the following with a python interpreter:
+    - To Import the montecarlo file from the montecarlo package run the following with a python interpreter:
 
 ```python
 from montecarlo import montecarlo
