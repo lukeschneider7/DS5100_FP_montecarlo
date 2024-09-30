@@ -2,7 +2,7 @@
 
 # Project Description 
 
-This project is a montecarlo Die game Simulator
+This project is a montecarlo Die game Simulator for UVA MSDS Summer 2024 section of DS5100 Programming for Data Science.
 
 # MetaData
     Name: Luke Schneider
